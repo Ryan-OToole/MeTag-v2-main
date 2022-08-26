@@ -7,7 +7,9 @@ import Web3Modal from "web3modal";
 import providerOptionsObject from '../providerOptions';
 
 
-function Navbar() {
+function Navbar(props) {
+
+  // const [library, setLibrary] = useState();
 
   const connectWallet = async () => {
     let providerOptions = providerOptionsObject.providerOptions;
@@ -18,11 +20,11 @@ function Navbar() {
     });
 
     const provider = await web3Modal.connect();
-    const library = new ethers.providers.Web3Provider(provider);
-    const accounts = await library.listAccounts();
+    const libraryUse = new ethers.providers.Web3Provider(provider);
+    props.pullUpLibrary(libraryUse)
+    const accounts = await libraryUse.listAccounts();
     console.log(accounts[0]);
 }
-
 
   return (
     <header className="flex flex-wrap justify-center items-center sticky top-0 bg-transparent backdrop-blur-lg z-[99] transition duration-200 py-0.5 px-16">

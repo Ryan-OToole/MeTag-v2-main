@@ -4,11 +4,19 @@ import styles from '../styles/Home.module.css'
 import Dashboard from './Dashboard'
 import Head from 'next/head'
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useState } from "react";
 
 export default function Home() {
 
+  const [library, setLibrary] = useState("");
+
   const getSessionInfo = () => {
     console.log('session', session);
+  }
+
+  const pullUpLibrary = (useLibrary) => {
+    console.log('pull up so strong', useLibrary);
+    setLibrary(useLibrary);
   }
 
   const { data: session } = useSession();
@@ -25,8 +33,8 @@ export default function Home() {
     </>
     }
     {getSessionInfo()}
-    <Navbar />
-    <Dashboard/>
+    <Navbar pullUpLibrary={pullUpLibrary} />
+    <Dashboard library={library} />
     </>
   )
 }

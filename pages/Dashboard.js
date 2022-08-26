@@ -19,9 +19,9 @@ import { MdOutlineContentCopy } from "react-icons/md";
 import { BsThreeDots, BsFillPlusCircleFill } from "react-icons/bs";
 // import { Switch } from "@chakra-ui/switch";
 
-function Dashboard() {
+function Dashboard(props) {
 
-  const [metamaskAccount, setMetamaskAccount] = useState("");
+  const [metamaskAccount, setMetamaskAccount] = useState("0x1ce750e83B91D00b6cCe3ae6feBe71420feAa5FF");
   const [binanceAccount, setBinanceAccount] = useState("");
   const [portisAccount, setPortisAccount] = useState("");
   const [userMetadata, setUserMetadata] = useState(null);
@@ -62,10 +62,11 @@ function Dashboard() {
     try {
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
+      console.log('library', library);
       const accounts = await library.listAccounts();
       console.log('accounts[0]', accounts[0]);
       if (event.target.name == 'metamask') {
-        setMetamaskAccount(accounts[0]);
+        // setMetamaskAccount(accounts[0]);
       }
       if (event.target.name == 'binance') {
         setBinanceAccount(accounts[0]);
@@ -76,7 +77,7 @@ function Dashboard() {
 
       provider.on("accountsChanged", (accounts) => {
         if (event.target.name == 'metamask') {
-          setMetamaskAccount(accounts[0]);
+          // setMetamaskAccount(accounts[0]);
          }
          if (event.target.name == 'binance') {
           setBinanceAccount(accounts[0]);
@@ -90,6 +91,16 @@ function Dashboard() {
         console.log('error', error);
     }
   }
+
+  const pay = async () => {
+    let tx = {
+      to: metamaskAccount,
+      // Convert currency unit from ether to wei
+      value: ethers.utils.parseEther('.0001')
+    }
+    props.library.sendTransaction(tx);
+  }
+
 
   return (
     <>
@@ -122,6 +133,12 @@ function Dashboard() {
                 name="metamask"
               >
                 Connect
+              </button>
+              <button
+                className=" font-roboto  border-2 px-[60px] py-2 border-[#6633FF] hover:bg-[#6633FF]"
+                onClick={pay}
+              >
+                Pay
               </button>
             </div>
             <div className="flex  items-center justify-between mt-10">
